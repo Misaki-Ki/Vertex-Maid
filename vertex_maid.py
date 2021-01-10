@@ -43,8 +43,6 @@ class MESH_OT_Vertex_Group_Cleanup(bpy.types.Operator):
 
         return {'FINISHED'}
     
-    print('Vertex Group Cleanup Successfully Added.')
-    
 
 def add_to_menu(self, context):
     self.layout.separator()
