@@ -4,7 +4,8 @@ bl_info = {
     "version": (1, 0),
     "blender": (2, 80, 0),
     "location": "Properties > Object Properties > Vertex Group Specials", 
-    "description": "A collection of tools to help with the maintenance of Vertex Groups"
+    "description": "A collection of tools to help with the maintenance of Vertex Groups",
+    "category": "Mesh"
 }
 import bpy
 
