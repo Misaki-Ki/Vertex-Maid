@@ -21,17 +21,20 @@ class MESH_OT_Vertex_Group_Cleanup(bpy.types.Operator):
         
     @classmethod
     def poll(cls, context):
-    
-        first_object = context.view_layer.objects.selected[1]
-        second_object = context.view_layer.objects.selected[0]
+    # Checking if the first select object is an armature, and that only two objects are selected.
+        number_of_selected_objects = len(context.view_layer.objects.selected)
+        if (number_of_selected_objects == 2):
+                for objects in context.view_layer.objects.selected:
+                    if objects.type == 'ARMATURE':
+                        return True
+        else: 
+            return bpy.context.view_layer.objects.active == 'MESH'
         
-        
-        # Checking if the first select object is an armature, and that only two objects are selected.
-        return first_object.type == 'ARMATURE' and (len(context.view_layer.objects.selected) == 2)
-        
-    def execute(self, context):    
-        armature_object = context.view_layer.objects.selected[1]
-        mesh_object = context.view_layer.objects.selected[0]
+    def execute(self, context):
+        for i, objects in enumerate(context.view_layer.objects.selected):
+            if objects.type == 'ARMATURE':
+                armature_object = context.view_layer.objects.selected[i]
+        mesh_object = context.view_layer.objects.active
         
         
         # Checking to see if each vertex group is contained in the armature. If it is not, then we'll remove 
