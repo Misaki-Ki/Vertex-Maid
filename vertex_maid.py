@@ -59,10 +59,13 @@ class MESH_OT_Remove_Empty_Vertex_Groups(Operator):
     def execute(self, context):
         mesh_object = context.view_layer.objects.active
         mesh_verticies = mesh_object.data.vertices
+        
+        # Searching the list in reverse (so python doesn't get jumbled up).
         for vertex_group_index in range(len(mesh_object.vertex_groups) -1, -1, -1):
-            if not any(vertex_group_index in [g.group for g in v.groups] for v in mesh_verticies):
+            verts_in_group = [v for v in mesh_verticies if vertex_group_index in [vg.group for vg in v.groups if (vg.weight > 0.0)] ]
+            if len(verts_in_group) == 0:
                 mesh_object.vertex_groups.remove(mesh_object.vertex_groups[vertex_group_index])
-                
+            print(f"Index: {vertex_group_index} \n {verts_in_group}") 
         return {'FINISHED'}
     
 def add_to_menu(self, context):
