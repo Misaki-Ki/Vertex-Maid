@@ -8,9 +8,10 @@ bl_info = {
     "category": "Mesh"
 }
 import bpy
+from bpy.types import Operator
 
 
-class MESH_OT_Vertex_Group_Cleanup(bpy.types.Operator):
+class MESH_OT_Vertex_Group_Cleanup(Operator):
     bl_idname = 'mesh.vertex_group_cleanup'
     bl_label = 'Remove Non-Bone Vertex Groups'
     bl_description = 'Removes Vertex Groups that do not have a matching bone in the selected armature.'
@@ -23,6 +24,8 @@ class MESH_OT_Vertex_Group_Cleanup(bpy.types.Operator):
     def poll(cls, context):
     # Checking if the first select object is an armature, and that only two objects are selected.
         number_of_selected_objects = len(context.view_layer.objects.selected)
+        
+        # Checking the amount of selected objects first, that way we don't iterate over a list if it isn't needed.
         if (number_of_selected_objects == 2):
                 for objects in context.view_layer.objects.selected:
                     if objects.type == 'ARMATURE':
@@ -47,12 +50,27 @@ class MESH_OT_Vertex_Group_Cleanup(bpy.types.Operator):
 
         return {'FINISHED'}
     
-
+    
+class MESH_OT_Remove_Empty_Vertex_Groups(Operator):
+    bl_idname = 'mesh.remove_empty_vertex_groups'
+    bl_label = 'Remove Empty Vertex Groups'
+    bl_description = 'Removes Vertex Groups that do not contain any weights'
+    
+    def execute(self, context):
+        mesh_object = context.view_layer.objects.active
+        mesh_verticies = mesh_object.data.vertices
+        for vertex_group_index in range(len(mesh_object.vertex_groups) -1, -1, -1):
+            if not any(vertex_group_index in [g.group for g in v.groups] for v in mesh_verticies):
+                mesh_object.vertex_groups.remove(mesh_object.vertex_groups[vertex_group_index])
+                
+        return {'FINISHED'}
+    
 def add_to_menu(self, context):
     self.layout.separator()
     self.layout.operator('mesh.vertex_group_cleanup', icon = 'TRASH')
+    self.layout.operator('mesh.remove_empty_vertex_groups')
     
-classes = (MESH_OT_Vertex_Group_Cleanup,)
+classes = (MESH_OT_Vertex_Group_Cleanup,MESH_OT_Remove_Empty_Vertex_Groups)
 
 def register():
     from bpy.utils import register_class
