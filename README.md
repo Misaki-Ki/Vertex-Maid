@@ -10,5 +10,5 @@
 
 
 ### Remove Empty Vertex Groups
-* Removes any empty vertex groups from the mesh. 
+* Removes any empty vertex groups from the mesh.  (Currently it counts 0 weights as not-empty, I'd like to fix this soon)
 * Usage: Select a mesh, and then select the operation in the vertex group drop-down menu.
