@@ -6,4 +6,4 @@
 
 ### Remove Non-Bone Vertex Groups
 * Removes Vertex Groups that do not have a matching bone in the selected armature.
-* Usage: Select an Armature, then Select a Mesh. Finally select the operation in the vertex group drop-down menu.
+* Usage: Select an Armature, then select a Mesh. Finally select the operation in the vertex group drop-down menu.
