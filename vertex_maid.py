@@ -34,17 +34,15 @@ class MESH_OT_Vertex_Group_Cleanup(Operator):
             return bpy.context.view_layer.objects.active == 'MESH'
         
     def execute(self, context):
-        for i, objects in enumerate(context.view_layer.objects.selected):
-            if objects.type == 'ARMATURE':
-                armature_object = context.view_layer.objects.selected[i]
+        armature_object = [context.view_layer.objects.selected[i] for i, objects in enumerate(context.view_layer.objects.selected) if objects.type == 'ARMATURE']
         mesh_object = context.view_layer.objects.active
         
         
         # Checking to see if each vertex group is contained in the armature. If it is not, then we'll remove 
         # that vertex group. (N^2)
-        for group in mesh_object.vertex_groups[:]:
-            if group.name not in armature_object.data.bones:
-                mesh_object.vertex_groups.remove(group)
+        for group_index in range(len(mesh_object.vertex_groups) -1, -1, -1):
+            if mesh_object.vertex_groups[group_index].name not in armature_object[0].data.bones:
+                mesh_object.vertex_groups.remove( mesh_object.vertex_groups[group_index])
         
         
 
