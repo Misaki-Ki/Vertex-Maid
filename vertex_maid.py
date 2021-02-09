@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Vertex Maid",
     "author": "Misaki Ki",
-    "version": (1, 0),
+    "version": (1, 1),
     "blender": (2, 80, 0),
     "location": "Properties > Object Properties > Vertex Group Specials", 
     "description": "A collection of tools to help with the maintenance of Vertex Groups",
@@ -11,8 +11,8 @@ import bpy
 from bpy.types import Operator
 
 
-class MESH_OT_Vertex_Group_Cleanup(Operator):
-    bl_idname = 'mesh.vertex_group_cleanup'
+class OBJECT_OT_Vertex_Group_Bone_Cleanup(Operator):
+    bl_idname = 'object.vertex_group_bone_cleanup'
     bl_label = 'Remove Non-Bone Vertex Groups'
     bl_description = 'Removes Vertex Groups that do not have a matching bone in the selected armature.'
     
@@ -50,8 +50,8 @@ class MESH_OT_Vertex_Group_Cleanup(Operator):
         return {'FINISHED'}
     
     
-class MESH_OT_Remove_Empty_Vertex_Groups(Operator):
-    bl_idname = 'mesh.remove_empty_vertex_groups'
+class OBJECT_OT_Remove_Empty_Vertex_Groups(Operator):
+    bl_idname = 'object.remove_empty_vertex_groups'
     bl_label = 'Remove Empty Vertex Groups'
     bl_description = 'Removes Vertex Groups that do not contain any weights'
     
@@ -65,12 +65,19 @@ class MESH_OT_Remove_Empty_Vertex_Groups(Operator):
                  mesh_object.vertex_groups.remove(mesh_object.vertex_groups[vertex_group_index])
         return {'FINISHED'}
     
-def add_to_menu(self, context):
-    self.layout.separator()
-    self.layout.operator('mesh.vertex_group_cleanup', icon = 'TRASH')
-    self.layout.operator('mesh.remove_empty_vertex_groups')
+class MESH_MT_VertexMaid(bpy.types.Menu):
+    bl_idname = "MESH_MT_Vertex_Maid_Menu"
+    bl_label = "Vertex Maid"
     
-classes = (MESH_OT_Vertex_Group_Cleanup,MESH_OT_Remove_Empty_Vertex_Groups)
+    def draw(self, context):
+        self.layout.operator('object.vertex_group_bone_cleanup', icon = 'TRASH')
+        self.layout.operator('object.remove_empty_vertex_groups')
+        
+    
+def add_to_menu(self, context):    
+    self.layout.menu(MESH_MT_VertexMaid.bl_idname, icon = 'HEART')
+    
+classes = (MESH_MT_VertexMaid, OBJECT_OT_Vertex_Group_Bone_Cleanup, OBJECT_OT_Remove_Empty_Vertex_Groups)
 
 def register():
     from bpy.utils import register_class
