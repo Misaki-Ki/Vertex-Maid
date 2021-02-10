@@ -11,8 +11,8 @@ import bpy
 from bpy.types import Operator
 
 
-class OBJECT_OT_Vertex_Group_Bone_Cleanup(Operator):
-    bl_idname = 'object.vertex_group_bone_cleanup'
+class VERTEXMAID_OT_Vertex_Group_Bone_Cleanup(Operator):
+    bl_idname = 'vertexmaid.vertex_group_bone_cleanup'
     bl_label = 'Remove Non-Bone Vertex Groups'
     bl_description = 'Removes Vertex Groups that do not have a matching bone in the selected armature.'
     
@@ -50,8 +50,8 @@ class OBJECT_OT_Vertex_Group_Bone_Cleanup(Operator):
         return {'FINISHED'}
     
     
-class OBJECT_OT_Remove_Empty_Vertex_Groups(Operator):
-    bl_idname = 'object.remove_empty_vertex_groups'
+class VERTEXMAID_OT_Remove_Empty_Vertex_Groups(Operator):
+    bl_idname = 'vertexmaid.remove_empty_vertex_groups'
     bl_label = 'Remove Empty Vertex Groups'
     bl_description = 'Removes Vertex Groups that do not contain any weights'
     
@@ -65,19 +65,19 @@ class OBJECT_OT_Remove_Empty_Vertex_Groups(Operator):
                  mesh_object.vertex_groups.remove(mesh_object.vertex_groups[vertex_group_index])
         return {'FINISHED'}
     
-class MESH_MT_VertexMaid(bpy.types.Menu):
-    bl_idname = "MESH_MT_Vertex_Maid_Menu"
+class VERTEXMAID_MT_VertexMaid(bpy.types.Menu):
+    bl_idname = "VERTEXMAID_MT_Vertex_Maid_Menu"
     bl_label = "Vertex Maid"
     
     def draw(self, context):
-        self.layout.operator('object.vertex_group_bone_cleanup', icon = 'TRASH')
-        self.layout.operator('object.remove_empty_vertex_groups')
+        self.layout.operator('vertexmaid.vertex_group_bone_cleanup', icon = 'TRASH')
+        self.layout.operator('vertexmaid.remove_empty_vertex_groups')
         
     
 def add_to_menu(self, context):    
-    self.layout.menu(MESH_MT_VertexMaid.bl_idname, icon = 'HEART')
+    self.layout.menu(VERTEXMAID_MT_VertexMaid.bl_idname, icon = 'HEART')
     
-classes = (MESH_MT_VertexMaid, OBJECT_OT_Vertex_Group_Bone_Cleanup, OBJECT_OT_Remove_Empty_Vertex_Groups)
+classes = (VERTEXMAID_MT_VertexMaid, VERTEXMAID_OT_Vertex_Group_Bone_Cleanup, VERTEXMAID_OT_Remove_Empty_Vertex_Groups)
 
 def register():
     from bpy.utils import register_class
