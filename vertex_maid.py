@@ -102,10 +102,11 @@ class VERTEXMAID_OT_Remove_Empty_Vertex_Groups(Operator):
     def execute(self, context):
         mesh_object = context.view_layer.objects.active
         mesh_verticies = mesh_object.data.vertices
+        eval_mesh_verts = mesh_object.evaluated_get(context.evaluated_depsgraph_get()).to_mesh().vertices
         
         # Searching the list in reverse (so python doesn't get jumbled up).
         for vertex_group_index in range(len(mesh_object.vertex_groups) -1, -1, -1):
-            if not any(vertex_group_index in [g.group for g in v.groups if g.weight > 0.0] for v in mesh_verticies):
+            if not any(vertex_group_index in [g.group for g in v.groups if g.weight > 0.0] for v in eval_mesh_verts):
                  mesh_object.vertex_groups.remove(mesh_object.vertex_groups[vertex_group_index])
         return {'FINISHED'}
     
